@@ -19,20 +19,15 @@
 from random import random
 
 def weighted_choice(choices):
-	"""Weighted choice
-	
-	Returns a random integer.
-	"""
-	b = 0
-	rf = random() * sum(choices)
-	for i, f in enumerate(choices):
-		b += f
-		if rf <= b:
+	r = random() * sum(choices)
+	for i, w in enumerate(choices):
+		r -= w
+		if r < 0:
 			return i
 	return None
 
 if __name__ == "__main__":
 	print("Weighted choice:",end=" ")
-	for i in range(10):
+	for i in range(100000):
 		print(weighted_choice([33,77,11,80,44,33,77,55,99,22,66,88]),end=" ")
 	print()
