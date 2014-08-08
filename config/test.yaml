@@ -1,308 +1,189 @@
 ---
 
-stem:
-  syllables:
-  - position: 0
-    prefix: "<"
-    suffix: ">"
-    segments:
-    - probability: 0.8
-      phonemes:
-      - grapheme: "k"
-        weight: 5
-      - grapheme: "s"
-        weight: 4
-      - grapheme: "t"
-        weight: 4
-      - grapheme: "n"
-        weight: 4
-      - grapheme: "h"
-        weight: 3
-      - grapheme: "m"
-        weight: 1
-      - grapheme: "y"
-        weight: 1
-      - grapheme: "r"
-        weight: 1
-      - grapheme: "w"
-        weight: 1
-      - grapheme: "g"
-        weight: 1
-      - grapheme: "z"
-        weight: 1
-      - grapheme: "d"
-        weight: 1
-      - grapheme: "b"
-        weight: 1
-      - grapheme: "p"
-        weight: 1
+prefix: ""
+suffix: ""
+infix: ""
 
-    - probability: 0.005
-      phonemes:
-      - grapheme: "Y"
-        weight: 1
+syllables:
+- position: 0
+  prefix: "<"
+  suffix: ">"
+  infix: ""
+  segments:
+  - probability: 0.8
+    prefix: ""
+    suffix: ""
+    phonemes:
+    - ["k", 5]  # [<grapheme>, <weight>]
+    - ["s", 4]
+    - ["t", 4]
+    - ["n", 4]
+    - ["h", 3]
+    - ["m", 1]
+    - ["y", 1]
+    - ["r", 1]
+    - ["w", 1]
+    - ["g", 1]
+    - ["z", 1]
+    - ["d", 1]
+    - ["b", 1]
+    - ["p", 1]
 
-    - probability: 1.0
-      phonemes:
-      - grapheme: "a"
-        weight: 5
-      - grapheme: "i"
-        weight: 4
-      - grapheme: "u"
-        weight: 4
-      - grapheme: "e"
-        weight: 3
-      - grapheme: "o"
-        weight: 3
+  - probability: 0.005
+    phonemes:
+    - ["Y", 1]
 
-    - probability: 0.1
-      phonemes:
-      - grapheme: "N"
-        weight: 8
-      - grapheme: "x"
-        weight: 1
+  - probability: 1.0
+    phonemes:
+    - ["a", 5]
+    - ["i", 4]
+    - ["u", 4]
+    - ["e", 3]
+    - ["o", 3]
 
-  filters:
-  - regex: "[yY][Yie]"
-  - regex: "<w[Yiueo]"
-  - regex: "x>$"
-  - regex: "N><.Y"
-    probability: 0.9
-  - regex: "x><.Y"
-  - regex: "<Y"
-  - regex: "x><[^kstpc]"
+  - probability: 0.1
+    phonemes:
+    - ["N", 8]
+    - ["x", 1]
+
+filters:
+- "[yY][Yie]"  # regex
+- "<w[Yiueo]"
+- "x>$"
+- ["N><.Y", 0.9, No]  # [<regex>, <probability>, <allow:Yes/No,default:No>]
+- "x><.Y"
+- "<Y"
+- "x><[^kstpc]"
   
-  - regex: "mYu"
-    probability: 0.95
-  - regex: "di"
-    probability: 0.9
-  - regex: "du"
-    probability: 0.9
-  - regex: "^<d[ui]"
-  
-  syllable-balance: [2, 12, 8, 2, 1]
+- ["mYu", 0.95]
+- ["di", 0.9]
+- ["du", 0.9]
+- "^<d[ui]"
+
+syllable-balance: [2, 12, 8, 2, 1]  # stems are mostly going to be 2 syllables long
 
 writing-systems:
 - transliterations:
-  - regex: "si"
-    replacement: "shi"
-  - regex: "sY"
-    replacement: "sh"
-  - regex: "ti"
-    replacement: "chi"
-  - regex: "hu"
-    replacement: "fu"
-  - regex: "tY"
-    replacement: "ch"
-  - regex: "zi"
-    replacement: "ji"
-  - regex: "zY"
-    replacement: "j"
-  - regex: "d([iu])"
-    replacement: "j\\1"
-  - regex: "N><([aiueo])"
-    replacement: "n'><\\1"
-  - regex: "x><ch"
-    replacement: "t><ch"
-  - regex: "x><(.)(.?)"
-    replacement: "\\1><\\1\\2"
-  - regex: "Y"
-    replacement: "y"
-  - regex: "N"
-    replacement: "n"
+  - ["si", "shi", 1.0]  # [<regex>, <replacement>, <probability,default:1.0>]
+  - ["sY", "sh"]
+  - ["ti", "chi"]
+  - ["hu", "fu"]
+  - ["tY", "ch"]
+  - ["zi", "ji"]
+  - ["zY", "j"]
+  - ["d([iu])", "j\\1"]
+  - ["N><([aiueo])", "n'><\\1"]
+  - ["x><ch", "t><ch"]
+  - ["x><(.)(.?)", "\\1><\\1\\2"]
+  - ["Y", "y"]
+  - ["N", "n"]
 
-  - regex: "a><a"
-    replacement: "ā"
-  - regex: "u><u"
-    replacement: "ū"
-  - regex: "e><e"
-    replacement: "ē"
-  - regex: "o><[ou]"
-    replacement: "ō"
+  - ["a><a", "ā"]
+  - ["u><u", "ū"]
+  - ["e><e", "ē"]
+  - ["o><[ou]", "ō"]
 
-  - regex: "[<>]"
-    replacement: ""
+  - ["[<>]", ""]
 
 
 - transliterations:
-  - regex: "<ya"
-    replacement: "や"
-  - regex: "<yu"
-    replacement: "ゆ"
-  - regex: "<yo"
-    replacement: "よ"
-  - regex: "Ya"
-    replacement: "iゃ"
-  - regex: "Yu"
-    replacement: "iゅ"
-  - regex: "Yo"
-    replacement: "iょ"
+  - ["<ya", "や"]
+  - ["<yu", "ゆ"]
+  - ["<yo", "よ"]
+  - ["Ya", "iゃ"]
+  - ["Yu", "iゅ"]
+  - ["Yo", "iょ"]
 
-  - regex: "<ka"
-    replacement: "か"
-  - regex: "<ki"
-    replacement: "き"
-  - regex: "<ku"
-    replacement: "く"
-  - regex: "<ke"
-    replacement: "け"
-  - regex: "<ko"
-    replacement: "こ"
+  - ["<ka", "か"]
+  - ["<ki", "き"]
+  - ["<ku", "く"]
+  - ["<ke", "け"]
+  - ["<ko", "こ"]
 
-  - regex: "<sa"
-    replacement: "さ"
-  - regex: "<si"
-    replacement: "し"
-  - regex: "<su"
-    replacement: "す"
-  - regex: "<se"
-    replacement: "せ"
-  - regex: "<so"
-    replacement: "そ"
+  - ["<sa", "さ"]
+  - ["<si", "し"]
+  - ["<su", "す"]
+  - ["<se", "せ"]
+  - ["<so", "そ"]
 
-  - regex: "<ta"
-    replacement: "た"
-  - regex: "<ti"
-    replacement: "ち"
-  - regex: "<tu"
-    replacement: "つ"
-  - regex: "<te"
-    replacement: "て"
-  - regex: "<to"
-    replacement: "と"
+  - ["<ta", "た"]
+  - ["<ti", "ち"]
+  - ["<tu", "つ"]
+  - ["<te", "て"]
+  - ["<to", "と"]
 
-  - regex: "<na"
-    replacement: "な"
-  - regex: "<ni"
-    replacement: "に"
-  - regex: "<nu"
-    replacement: "ぬ"
-  - regex: "<ne"
-    replacement: "ね"
-  - regex: "<no"
-    replacement: "の"
+  - ["<na", "な"]
+  - ["<ni", "に"]
+  - ["<nu", "ぬ"]
+  - ["<ne", "ね"]
+  - ["<no", "の"]
 
-  - regex: "<ha"
-    replacement: "は"
-  - regex: "<hi"
-    replacement: "ひ"
-  - regex: "<hu"
-    replacement: "ふ"
-  - regex: "<he"
-    replacement: "へ"
-  - regex: "<ho"
-    replacement: "ほ"
+  - ["<ha", "は"]
+  - ["<hi", "ひ"]
+  - ["<hu", "ふ"]
+  - ["<he", "へ"]
+  - ["<ho", "ほ"]
 
-  - regex: "<ma"
-    replacement: "ま"
-  - regex: "<mi"
-    replacement: "み"
-  - regex: "<mu"
-    replacement: "む"
-  - regex: "<me"
-    replacement: "め"
-  - regex: "<mo"
-    replacement: "も"
+  - ["<ma", "ま"]
+  - ["<mi", "み"]
+  - ["<mu", "む"]
+  - ["<me", "め"]
+  - ["<mo", "も"]
 
-  - regex: "<ra"
-    replacement: "ら"
-  - regex: "<ri"
-    replacement: "り"
-  - regex: "<ru"
-    replacement: "る"
-  - regex: "<re"
-    replacement: "れ"
-  - regex: "<ro"
-    replacement: "ろ"
+  - ["<ra", "ら"]
+  - ["<ri", "り"]
+  - ["<ru", "る"]
+  - ["<re", "れ"]
+  - ["<ro", "ろ"]
 
-  - regex: "<wa"
-    replacement: "わ"
-  - regex: "<wo"
-    replacement: "を"
-  - regex: "N>"
-    replacement: "ん"
-  - regex: "x>"
-    replacement: "っ"
+  - ["<wa", "わ"]
+  - ["<wo", "を"]
+  - ["N>", "ん"]
+  - ["x>", "っ"]
 
-  - regex: "<ga"
-    replacement: "が"
-  - regex: "<gi"
-    replacement: "ぎ"
-  - regex: "<gu"
-    replacement: "ぐ"
-  - regex: "<ge"
-    replacement: "げ"
-  - regex: "<go"
-    replacement: "ご"
+  - ["<ga", "が"]
+  - ["<gi", "ぎ"]
+  - ["<gu", "ぐ"]
+  - ["<ge", "げ"]
+  - ["<go", "ご"]
 
-  - regex: "<za"
-    replacement: "ざ"
-  - regex: "<zi"
-    replacement: "じ"
-  - regex: "<zu"
-    replacement: "ず"
-  - regex: "<ze"
-    replacement: "ぜ"
-  - regex: "<zo"
-    replacement: "ぞ"
+  - ["<za", "ざ"]
+  - ["<zi", "じ"]
+  - ["<zu", "ず"]
+  - ["<ze", "ぜ"]
+  - ["<zo", "ぞ"]
 
-  - regex: "<da"
-    replacement: "だ"
-  - regex: "<di"
-    replacement: "ぢ"
-  - regex: "<du"
-    replacement: "づ"
-  - regex: "<de"
-    replacement: "で"
-  - regex: "<do"
-    replacement: "ど"
+  - ["<da", "だ"]
+  - ["<di", "ぢ"]
+  - ["<du", "づ"]
+  - ["<de", "で"]
+  - ["<do", "ど"]
 
-  - regex: "<ba"
-    replacement: "ば"
-  - regex: "<bi"
-    replacement: "び"
-  - regex: "<bu"
-    replacement: "ぶ"
-  - regex: "<be"
-    replacement: "べ"
-  - regex: "<bo"
-    replacement: "ぼ"
+  - ["<ba", "ば"]
+  - ["<bi", "び"]
+  - ["<bu", "ぶ"]
+  - ["<be", "べ"]
+  - ["<bo", "ぼ"]
 
-  - regex: "<pa"
-    replacement: "ぱ"
-  - regex: "<pi"
-    replacement: "ぴ"
-  - regex: "<pu"
-    replacement: "ぷ"
-  - regex: "<pe"
-    replacement: "ぺ"
-  - regex: "<po"
-    replacement: "ぽ"
+  - ["<pa", "ぱ"]
+  - ["<pi", "ぴ"]
+  - ["<pu", "ぷ"]
+  - ["<pe", "ぺ"]
+  - ["<po", "ぽ"]
 
-  - regex: "<a"
-    replacement: "あ"
-  - regex: "<i"
-    replacement: "い"
-  - regex: "<u"
-    replacement: "う"
-  - regex: "<e"
-    replacement: "え"
-  - regex: "<o"
-    replacement: "お"
+  - ["<a", "あ"]
+  - ["<i", "い"]
+  - ["<u", "う"]
+  - ["<e", "え"]
+  - ["<o", "お"]
 
-  - regex: "[<>]"
-    replacement: ""
+  - ["[<>]", ""]
 
 
 - transliterations:
-  - regex: "N><([aiueo])"
-    replacement: "n'><\\1"
-  - regex: "x><(.)(.?)"
-    replacement: "\\1><\\1\\2"
-  - regex: "Y"
-    replacement: "y"
-  - regex: "N"
-    replacement: "n"
+  - ["N><([aiueo])", "n'><\\1"]
+  - ["x><(.)(.?)", "\\1><\\1\\2"]
+  - ["Y", "y"]
+  - ["N", "n"]
 
-  - regex: "[<>]"
-    replacement: ""
+  - ["[<>]", ""]

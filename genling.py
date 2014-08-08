@@ -29,7 +29,7 @@ with open(language_config) as f:
 	language = yaml_decode(f)
 
 syllables = list()
-for syllable in language["stem"]["syllables"]:
+for syllable in language["syllables"]:
 	if "segments" not in syllable:
 		continue
 	
@@ -40,11 +40,12 @@ for syllable in language["stem"]["syllables"]:
 		
 		phonemes = list()
 		for phoneme in segment["phonemes"]:
-			if "grapheme" not in phoneme:
-				continue
-			
-			phonemes.append(Phoneme(
-				phoneme["grapheme"], segment.get("weight", 1)))
+			if isinstance(phoneme, str):
+				phoneme = [phoneme]
+			try:
+				phonemes.append(Phoneme(*phoneme))
+			except:
+				print("Phoneme '" + phoneme + "' invalid.")
 			
 		segments.append(Segment(phonemes, segment.get("probability", 1.0),
 			segment.get("prefix", ""), segment.get("suffix", "")))
@@ -52,19 +53,20 @@ for syllable in language["stem"]["syllables"]:
 	syllables.append(Syllable(segments, syllable.get("position", 0),
 		syllable.get("prefix", ""), syllable.get("suffix", ""), syllable.get("infix", "")))
 
-syllable_balance = language["stem"].get("syllable-balance", [1,1,1,1])
+syllable_balance = language.get("syllable-balance", [1,1,1,1])
 
 filters = list()
-for filt in language["stem"]["filters"]:
-	probability = filt.get("probability", 1.0)
-	allow = filt.get("allow", False)
-	if("regex" in filt):
-		filters.append(RegexFilter(filt["regex"],
-			probability, allow))
+for filt in language["filters"]:
+	if isinstance(filt, str):
+		filt = [filt]
+	try:
+		filters.append(RegexFilter(*filt))
+	except:
+		print("Filter '" + filt + "' invalid.")
 
-prefix = language["stem"].get("prefix", "")
-suffix = language["stem"].get("suffix", "")
-infix = language["stem"].get("infix", "")
+prefix = language.get("prefix", "")
+suffix = language.get("suffix", "")
+infix = language.get("infix", "")
 
 stem = Stem(syllables, syllable_balance, filters, prefix, suffix, infix)
 
@@ -75,15 +77,12 @@ for writing_system in language["writing-systems"]:
 		
 	transliterations = list()
 	for transliteration in writing_system["transliterations"]:
+		if isinstance(transliteration, str):
+			transliteration = [transliteration]
 		try:
-			replacement = transliteration["replacement"]
+			transliterations.append(RegexTransliteration(*transliteration))
 		except:
-			continue
-		probability = transliteration.get("probability", 1.0)
-			
-		if "regex" in transliteration:
-			transliterations.append(RegexTransliteration(
-				transliteration["regex"], replacement, probability))
+			print("Transliteration '" + transliterations + "' invalid.")
 			
 	writing_systems.append(WritingSystem(transliterations))
 

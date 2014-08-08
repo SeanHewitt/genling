@@ -28,6 +28,6 @@ def weighted_choice(choices):
 
 if __name__ == "__main__":
 	print("Weighted choice:",end=" ")
-	for i in range(100000):
+	for i in range(10):
 		print(weighted_choice([33,77,11,80,44,33,77,55,99,22,66,88]),end=" ")
 	print()
