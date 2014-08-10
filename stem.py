@@ -25,23 +25,24 @@ class Phoneme:
 		self.weight = weight
 		
 class Segment:
-	def __init__(self, phonemes, probability=1.0, prefix="", suffix=""):
+	def __init__(self, phonemes, **prop):
 		self.phonemes = phonemes
-		self.probability = probability
-		self.prefix = prefix
-		self.suffix = suffix
+		self.probability = prop.get("probability", 1.0)
+		self.prefix = prop.get("prefix", "")
+		self.suffix = prop.get("suffix", "")
 		
 	def generate(self):
 		weights = [phoneme.weight for phoneme in self.phonemes]
 		return self.prefix + self.phonemes[weighted_choice(weights)].grapheme + self.suffix
 		
 class Syllable:
-	def __init__(self, segments, position=0, prefix="", suffix="", infix=""):
+	def __init__(self, segments, **prop):
 		self.segments = segments
-		self.position = position
-		self.prefix = prefix
-		self.suffix = suffix
-		self.infix = infix
+		self.position = prop.get("position", 0)
+		self.weight = prop.get("weight", 1)
+		self.prefix = prop.get("prefix", "")
+		self.suffix = prop.get("suffix", "")
+		self.infix = prop.get("infix", "")
 	
 	def generate(self):
 		string = [segment.generate() for segment in self.segments if random() <= segment.probability]
@@ -71,33 +72,38 @@ class RegexFilter:
 		self.regex = re_compile(pattern)
 		
 class Stem:
-	def __init__(self, syllables, syllable_balance, filters=[], prefix="", suffix="", infix=""):
+	def __init__(self, syllables, **prop):
 		self.syllables = syllables
-		self.syllable_balance = syllable_balance
-		self.filters = filters
-		self.prefix = prefix
-		self.suffix = suffix
-		self.infix = infix
+		self.filters = prop.get("filters", [])
+		self.syllable_balance = prop.get("syllable-balance", [1])
+		self.prefix =  prop.get("prefix", "")
+		self.suffix = prop.get("suffix", "")
+		self.infix = prop.get("infix", "")
 		
 	def generate(self):
 		syllable_amount = weighted_choice(self.syllable_balance) + 1
 		
-		is_allowed = False
-		while not is_allowed:
+		tries = 0
+		while tries < 100:
+			tries+=1
 			string = list()
-			is_allowed = True
 			for i in range(syllable_amount):
-				for syllable in self.syllables:
-					if(syllable.position == 0 or
-					   syllable.position == i + 1 or
-					   syllable.position == i - syllable_amount):
-						string.append(syllable.generate())
-						break
+				syllables = [syllable for syllable in self.syllables if syllable.position in [0, i+1, i - syllable_amount]]
+				if(len(syllables) > 1):
+					weights = [syllable.weight for syllable in syllables]
+					syllable = self.syllables[weighted_choice(weights)]
+				else:
+					syllable = syllables[0]
+					
+				string.append(syllable.generate())
 					
 			string = self.prefix + self.infix.join(string) + self.suffix
 			
 			for f in self.filters:
 				if not f.is_allowed(string):
-					is_allowed = False
 					break
+			else:
+				break
+		else:
+			string = None
 		return string

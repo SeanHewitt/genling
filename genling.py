@@ -21,15 +21,15 @@ from writing_system import *
 from yaml import load as yaml_decode
 from sys import argv
 
-language_config = argv[1]
+stem_config = argv[1]
 writing_system_index = int(argv[2])
 stem_count = int(argv[3])
 
-with open(language_config) as f:
-	language = yaml_decode(f)
+with open(stem_config) as f:
+	stem = yaml_decode(f)
 
 syllables = list()
-for syllable in language["syllables"]:
+for syllable in stem["syllables"]:
 	if "segments" not in syllable:
 		continue
 	
@@ -46,32 +46,27 @@ for syllable in language["syllables"]:
 				phonemes.append(Phoneme(*phoneme))
 			except:
 				print("Phoneme '" + phoneme + "' invalid.")
-			
-		segments.append(Segment(phonemes, segment.get("probability", 1.0),
-			segment.get("prefix", ""), segment.get("suffix", "")))
+		
+		del segment["phonemes"]
+		segments.append(Segment(phonemes, **segment))
 	
-	syllables.append(Syllable(segments, syllable.get("position", 0),
-		syllable.get("prefix", ""), syllable.get("suffix", ""), syllable.get("infix", "")))
+	del syllable["segments"]
+	syllables.append(Syllable(segments, **syllable))
 
-syllable_balance = language.get("syllable-balance", [1,1,1,1])
 
 filters = list()
-for filt in language["filters"]:
+for filt in stem.get("filters", []):
 	if isinstance(filt, str):
 		filt = [filt]
 	try:
 		filters.append(RegexFilter(*filt))
 	except:
-		print("Filter '" + filt + "' invalid.")
-
-prefix = language.get("prefix", "")
-suffix = language.get("suffix", "")
-infix = language.get("infix", "")
-
-stem = Stem(syllables, syllable_balance, filters, prefix, suffix, infix)
+		print("Filter '" + str(filt) + "' invalid.")
+		
+stem["filters"] = filters
 
 writing_systems = list()
-for writing_system in language["writing-systems"]:
+for writing_system in stem["writing-systems"]:
 	if "transliterations" not in writing_system:
 		continue
 		
@@ -85,9 +80,16 @@ for writing_system in language["writing-systems"]:
 			print("Transliteration '" + transliterations + "' invalid.")
 			
 	writing_systems.append(WritingSystem(transliterations))
+	
+del stem["syllables"]
+stem = Stem(syllables, **stem)
 
 for i in range(stem_count):
 	string = stem.generate()
 	if writing_system_index > 0:
 		string = writing_systems[writing_system_index-1].transliterate(string)
-	print(string)
+	if string:
+		pass
+		print(string)
+	else:
+		print("Failed to generate stem. Please check the filters.")
