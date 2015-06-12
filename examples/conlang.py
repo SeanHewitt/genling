@@ -191,26 +191,26 @@ filters = [
 	RegexFilter("h$"),
 	RegexFilter("c$"),
 
-	RegexFilter("n>m"),
+	SimpleFilter("n>m"),
 
-	RegexFilter("cs"),
+	SimpleFilter("cs"),
 
-	RegexFilter("l>l"),
-	RegexFilter("r>r"),
-	RegexFilter("l>r"),
-	RegexFilter("x>r")
+	SimpleFilter("l>l"),
+	SimpleFilter("r>r"),
+	SimpleFilter("l>r"),
+	SimpleFilter("x>r")
 ]
 
 transliterations = [
-	RegexTransliteration("A", "ı"),
-	RegexTransliteration("oe", "ø"),
+	SimpleReplace("A", "ı"),
+	SimpleReplace("oe", "ø"),
 
-	RegexTransliteration("T", "þ"),
-	RegexTransliteration("D", "ð"),
+	SimpleReplace("T", "þ"),
+	SimpleReplace("D", "ð"),
 
-	RegexTransliteration("x>(.)", "\\1\\1"),
+	RegexReplace("x>(.)", "\\1\\1"),
 
-	RegexTransliteration(">", "")
+	SimpleReplace(">", "")
 ]
 writing_system = WritingSystem(transliterations)
 

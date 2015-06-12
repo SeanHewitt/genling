@@ -93,7 +93,7 @@ class Stem:
 
 		return self.prefix + self.infix.join(string) + self.suffix
 
-class RegexFilter:
+class SimpleFilter:
 	def __init__(self, pattern, probability=1.0, allow=False):
 		self.pattern = pattern
 		self.probability = probability
@@ -102,10 +102,16 @@ class RegexFilter:
 	def is_allowed(self, stem_string):
 		if random() > self.probability:
 			return not self.allow
-		if self.regex.search(stem_string):
+		if self._match(stem_string):
 			return self.allow
 		else:
 			return not self.allow
+			
+	def _match(self, string):
+		return self.pattern in string
+		
+	def _prepare(self):
+		pass
 
 	@property
 	def pattern(self):
@@ -114,9 +120,16 @@ class RegexFilter:
 	@pattern.setter
 	def pattern(self, pattern):
 		self._pattern = pattern
-		self.regex = re_compile(pattern)
+		self._prepare()
 
-class RegexTransliteration:
+class RegexFilter(SimpleFilter):
+	def _match(self, string):
+		return self._regex.search(string)
+
+	def _prepare(self):
+		self._regex = re_compile(self.pattern)
+
+class SimpleReplace:
 	def __init__(self, pattern, replacement, probability=1.0):
 		self.pattern = pattern
 		self.replacement = replacement
@@ -126,7 +139,13 @@ class RegexTransliteration:
 		if random() > self.probability:
 			return string
 
-		return self.regex.sub(self.replacement, string)
+		return self._replace(string, self.replacement)
+
+	def _replace(self, string, replacement):
+		return string.replace(self.pattern, replacement)
+		
+	def _prepare(self):
+		pass
 
 	@property
 	def pattern(self):
@@ -135,7 +154,14 @@ class RegexTransliteration:
 	@pattern.setter
 	def pattern(self, pattern):
 		self._pattern = pattern
-		self.regex = re_compile(pattern)
+		self._prepare()
+
+class RegexReplace(SimpleReplace):
+	def _replace(self, string, replacement):
+		return self._regex.sub(replacement, string)
+		
+	def _prepare(self):
+		self._regex = re_compile(self.pattern)
 
 class WritingSystem:
 	def __init__(self, transliterations):
