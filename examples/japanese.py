@@ -58,7 +58,7 @@ filters = [
 	RegexFilter("x><.Y"),
 	SimpleFilter("<Y"),
 	RegexFilter("x><[^kstpc]"),
-  
+
 	SimpleFilter("mYu", 0.95),
 	SimpleFilter("di", 0.9),
 	SimpleFilter("du", 0.9),
@@ -68,7 +68,7 @@ filters = [
 writing_systems = {}
 
 # Hepburn
-transliterations = [
+conversions = [
 	SimpleReplace("si", "shi"),
 	SimpleReplace("sY", "sh"),
 	SimpleReplace("ti", "chi"),
@@ -93,10 +93,10 @@ transliterations = [
 	SimpleReplace("<", ""),
 	SimpleReplace(">", "")
 ]
-writing_systems["hepburn"] = WritingSystem(transliterations)
+writing_systems["hepburn"] = conversions
 
 # Hiragana
-transliterations = [
+conversions = [
 	SimpleReplace("<ya", "や"),
 	SimpleReplace("<yu", "ゆ"),
 	SimpleReplace("<yo", "よ"),
@@ -190,10 +190,10 @@ transliterations = [
 	SimpleReplace("<", ""),
 	SimpleReplace(">", "")
 ]
-writing_systems["hiragana"] = WritingSystem(transliterations)
+writing_systems["hiragana"] = conversions
 
 # Strict(Nihon/Kunrei-shiki)
-transliterations = [
+conversions = [
 	RegexReplace("N><([aiueo])", "n'><\\1"),
 	RegexReplace("x><(.)(.?)", "\\1><\\1\\2"),
 	SimpleReplace("Y", "y"),
@@ -202,25 +202,27 @@ transliterations = [
 	SimpleReplace("<", ""),
 	SimpleReplace(">", "")
 ]
-writing_systems["strict"] = WritingSystem(transliterations)
+writing_systems["strict"] = conversions
 
 
 from sys import argv
 
 amount = int(argv[1])
 
-if(len(argv) > 2 and argv[2] in writing_systems):
-	writing_system = writing_systems[argv[2]]
-else:
-	writing_system = None
+conversions = writing_systems["hiragana"]
+if len(argv) > 2:
+	if argv[2] in writing_systems:
+		conversions = writing_systems[argv[2]]
+	elif argv[2] == "raw":
+		conversions = []
 
 while amount:
 	string = stem.generate()
 	for f in filters:
-		if not f.is_allowed(string):
+		if f.is_rejected(string):
 			break
 	else:
-		if writing_system:
-			string = writing_system.transliterate(string)
+		for c in conversions:
+			string = c.replace(string)
 		print(string)
 		amount -= 1;

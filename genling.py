@@ -45,7 +45,7 @@ class Syllable:
 		self.suffix = prop.get("suffix", "")
 		self.infix = prop.get("infix", "")
 
-	def is_allowed_postion(self, i, l):
+	def is_permitted_postion(self, i, l):
 		if self.position == 0:
 			return True
 
@@ -82,7 +82,7 @@ class Stem:
 
 		string = list()
 		for i in range(syllable_amount):
-			syllables = [syllable for syllable in self.syllables if syllable.is_allowed_postion(i, syllable_amount)]
+			syllables = [syllable for syllable in self.syllables if syllable.is_permitted_postion(i, syllable_amount)]
 			if len(syllables) > 1:
 				weights = [syllable.weight for syllable in syllables]
 				syllable = self.syllables[weighted_choice(weights)]
@@ -94,22 +94,25 @@ class Stem:
 		return self.prefix + self.infix.join(string) + self.suffix
 
 class SimpleFilter:
-	def __init__(self, pattern, probability=1.0, allow=False):
+	def __init__(self, pattern, probability=1.0, permit=False):
 		self.pattern = pattern
 		self.probability = probability
-		self.allow = allow
+		self.permit = permit
 
-	def is_allowed(self, stem_string):
+	def is_permitted(self, string):
 		if random() > self.probability:
-			return not self.allow
-		if self._match(stem_string):
-			return self.allow
+			return not self.permit
+		if self._match(string):
+			return self.permit
 		else:
-			return not self.allow
-			
+			return not self.permit
+
+	def is_rejected(self, string):
+		return not self.is_permitted(string)
+
 	def _match(self, string):
 		return self.pattern in string
-		
+
 	def _prepare(self):
 		pass
 
@@ -135,7 +138,7 @@ class SimpleReplace:
 		self.replacement = replacement
 		self.probability = probability
 
-	def transliterate(self, string):
+	def replace(self, string):
 		if random() > self.probability:
 			return string
 
@@ -143,7 +146,7 @@ class SimpleReplace:
 
 	def _replace(self, string, replacement):
 		return string.replace(self.pattern, replacement)
-		
+
 	def _prepare(self):
 		pass
 
@@ -159,15 +162,6 @@ class SimpleReplace:
 class RegexReplace(SimpleReplace):
 	def _replace(self, string, replacement):
 		return self._regex.sub(replacement, string)
-		
+
 	def _prepare(self):
 		self._regex = re_compile(self.pattern)
-
-class WritingSystem:
-	def __init__(self, transliterations):
-		self.transliterations = transliterations
-
-	def transliterate(self, string):
-		for transliteration in self.transliterations:
-			string = transliteration.transliterate(string)
-		return string

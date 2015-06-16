@@ -2,14 +2,18 @@
 
 This is a project to develop a Python library with which it is possible to generate a spoken constructed language, a conlang. In the library's current state, it is possible to program a word stem generator.
 
-In the generating process, weights and probabilities affect the usage of individual phonemes, usage of syllable segments, usage of syllables in the same position, the amount of syllables within a stem and whether a stem caught by a filter is to be allowed. Regex is used for deciding whether a generated word stem is allowed or not (e.g. combinations of phonemes that are not permitted) and in transliterating a generated word/stem from a raw form (e.g. "&lt;ge&gt;&lt;hYo&gt;&lt;uN&gt;&lt;e&gt;&lt;nu&gt;") into a final form (e.g. "gehyōn'enu", "げひょうんえぬ", "gexyoungënu" or "гэхёунъэну").
+In the generating process, weights and probabilities affect the usage of individual phonemes, usage of syllable segments, usage of syllables in the same position, the amount of syllables within a stem and the usage of rules. Simple or more complex Regex rules are used for filtering generated word stems (e.g. combinations of phonemes that are not permitted) and in converting a generated word/stem from a raw form (e.g. "&lt;ge&gt;&lt;hYo&gt;&lt;uN&gt;&lt;e&gt;&lt;nu&gt;") into a final form (e.g. "gehyōn'enu", "げひょうんえぬ", "gexyoungënu" or "гэхёунъэну").
 
-Requirements:
+##Requirements:
 * Python3
 
-###Examples
+##Usage of examples
 ````
-python3 conlang.py 100 raw
 python3 conlang.py 100
+python3 conlang.py 100 raw
+
 python3 japanese.py 100 hiragana
+python3 japanese.py 100 hepburn
+python3 japanese.py 100 strict
+python3 japanese.py 100 raw
 ```

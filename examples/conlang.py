@@ -201,7 +201,7 @@ filters = [
 	SimpleFilter("x>r")
 ]
 
-transliterations = [
+conversions = [
 	SimpleReplace("A", "ı"),
 	SimpleReplace("oe", "ø"),
 
@@ -212,23 +212,21 @@ transliterations = [
 
 	SimpleReplace(">", "")
 ]
-writing_system = WritingSystem(transliterations)
-
 
 from sys import argv
 
 amount = int(argv[1])
 
 if(len(argv) > 2 and argv[2] == "raw"):
-	writing_system = None
+	conversions = []
 
 while amount:
 	string = stem.generate()
 	for f in filters:
-		if not f.is_allowed(string):
+		if f.is_rejected(string):
 			break
 	else:
-		if writing_system:
-			string = writing_system.transliterate(string)
+		for c in conversions:
+			string = c.replace(string)
 		print(string)
 		amount -= 1;
