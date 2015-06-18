@@ -28,7 +28,6 @@ class Phoneme:
 class Segment:
 	def __init__(self, phonemes, **prop):
 		self.phonemes = phonemes
-		self.probability = prop.get("probability", 1.0)
 		self.prefix = prop.get("prefix", "")
 		self.suffix = prop.get("suffix", "")
 
@@ -66,7 +65,7 @@ class Syllable:
 		return False
 
 	def generate(self):
-		string = [segment.generate() for segment in self.segments if random() <= segment.probability]
+		string = [segment.generate() for segment in self.segments]
 		return self.prefix + self.infix.join(string) + self.suffix
 
 class Stem:

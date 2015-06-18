@@ -8,15 +8,17 @@ segments = []
 
 # Initial
 phonemes = [
+	Phoneme("_", 10),
+
 	Phoneme("j", 1),
 	Phoneme("h", 1),
 	Phoneme("c", 1), # C
 ]
-segments.append(Segment(phonemes, probability=0.1))
+segments.append(Segment(phonemes))
 
 # Medial
 phonemes = [
-	Phoneme("", 20),
+	Phoneme("_", 20),
 
 	Phoneme("t", 5),  # t
 	Phoneme("tc", 2), # t_hC
@@ -108,6 +110,8 @@ segments.append(Segment(phonemes))
 
 # Coda
 phonemes = [
+	Phoneme("_", 22),
+
 	Phoneme("n", 6),
 	Phoneme("l", 4),
 	Phoneme("x", 6), # repeater
@@ -115,7 +119,7 @@ phonemes = [
 	Phoneme("h", 2),
 	Phoneme("r", 3)
 ]
-segments.append(Segment(phonemes, probability=0.5))
+segments.append(Segment(phonemes))
 
 syllables.append(Syllable(segments, position=1))
 
@@ -184,32 +188,38 @@ segments.append(Segment(phonemes))
 syllables.append(Syllable(segments, position=2))
 
 syllable_balance = [5, 2]
-stem = Stem(syllables, infix=">", balance=syllable_balance)
+stem = Stem(syllables, balance=syllable_balance, prefix="<", infix="#", suffix=">")
 
 filters = [
-	RegexFilter("x$"),
-	RegexFilter("h$"),
-	RegexFilter("c$"),
+	SimpleFilter("x>"),
+	SimpleFilter("h>"),
+	SimpleFilter("c>"),
 
-	SimpleFilter("n>m"),
+	SimpleFilter("n#m"),
 
 	SimpleFilter("cs"),
 
-	SimpleFilter("l>l"),
-	SimpleFilter("r>r"),
-	SimpleFilter("l>r"),
-	SimpleFilter("x>r")
+	SimpleFilter("l#l"),
+	SimpleFilter("r#r"),
+	SimpleFilter("l#r"),
+	SimpleFilter("x#r"),
+
+	RegexFilter("<._") # Stem starting with an initial
 ]
 
 conversions = [
+	SimpleReplace("_", ""),
+
 	SimpleReplace("A", "ı"),
 	SimpleReplace("oe", "ø"),
 
 	SimpleReplace("T", "þ"),
 	SimpleReplace("D", "ð"),
 
-	RegexReplace("x>(.)", "\\1\\1"),
+	RegexReplace("x#(.)", "\\1\\1"),
 
+	SimpleReplace("<", ""),
+	SimpleReplace("#", ""),
 	SimpleReplace(">", "")
 ]
 

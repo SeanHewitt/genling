@@ -5,6 +5,8 @@ segments = []
 
 # Initial
 phonemes = [
+	Phoneme("_", 20),
+
 	Phoneme("k", 5),
 	Phoneme("s", 4),
 	Phoneme("t", 4),
@@ -20,13 +22,14 @@ phonemes = [
 	Phoneme("b", 1),
 	Phoneme("p", 1)
 ]
-segments.append(Segment(phonemes, probability=0.8))
+segments.append(Segment(phonemes))
 
 # Medial
 phonemes = [
-	Phoneme("Y", 1)
+	Phoneme("_", 20),
+	Phoneme("y", 1)
 ]
-segments.append(Segment(phonemes, probability=0.005))
+segments.append(Segment(phonemes))
 
 # Nucleus
 phonemes = [
@@ -40,51 +43,62 @@ segments.append(Segment(phonemes))
 
 # Coda
 phonemes = [
-	Phoneme("N", 9),
-	Phoneme("x", 1)
+	Phoneme("_", 10),
+
+	Phoneme("n", 9),
+	Phoneme("x", 3)
 ]
-segments.append(Segment(phonemes, probability=0.1))
+segments.append(Segment(phonemes))
 
 syllables = [Syllable(segments, prefix="<", suffix=">")]
 
 syllable_balance = [2, 12, 8, 2, 1]
-stem = Stem(syllables, balance=syllable_balance)
+stem = Stem(syllables, balance=syllable_balance, prefix="<", suffix=">")
 
 filters = [
-	RegexFilter("[yY][Yie]"),
-	RegexFilter("<w[Yiueo]"),
-	RegexFilter("x>$"),
-	RegexFilter("N><.Y", 0.9, False),
-	RegexFilter("x><.Y"),
-	SimpleFilter("<Y"),
-	RegexFilter("x><[^kstpc]"),
+	SimpleFilter("_y"),
+	SimpleFilter("x>>"),
 
-	SimpleFilter("mYu", 0.95),
-	SimpleFilter("di", 0.9),
-	SimpleFilter("du", 0.9),
-	RegexFilter("^<d[ui]")
+	SimpleFilter("n><_",0.9),
+
+	SimpleFilter("<<d_[ui]")
+	SimpleFilter("d_i", 0.9),
+	SimpleFilter("d_u", 0.9),
+
+	SimpleFilter("mya", 0.95),
+	SimpleFilter("myu", 0.95),
+
+	RegexFilter("y_?[yie]"),
+	RegexFilter("w_?[yiueo]"),
+
+	RegexFilter("n><.y", 0.9, False),
+	RegexFilter("x><.y"),
+	RegexFilter("x><[^kstpc]")
 ]
 
 writing_systems = {}
 
 # Hepburn
 conversions = [
+	SimpleReplace("n><_", "n'"),
+
+	SimpleReplace("_", ""),
+
 	SimpleReplace("si", "shi"),
-	SimpleReplace("sY", "sh"),
+	SimpleReplace("sy", "sh"),
 	SimpleReplace("ti", "chi"),
 	SimpleReplace("tu", "tsu"),
 	SimpleReplace("hu", "fu"),
-	SimpleReplace("tY", "ch"),
+	SimpleReplace("ty", "ch"),
 	SimpleReplace("zi", "ji"),
-	SimpleReplace("zY", "j"),
-	RegexReplace("d([iu])", "j\\1"),
-	RegexReplace("N><([aiueo])", "n'><\\1"),
-	SimpleReplace("x><ch", "t><ch"),
-	RegexReplace("x><(.)(.?)", "\\1><\\1\\2"),
-	SimpleReplace("Y", "y"),
-	SimpleReplace("N", "n"),
+	SimpleReplace("zy", "j"),
+	SimpleReplace("di", "ji"),
+	SimpleReplace("du", "ju"),
+	SimpleReplace("x><ch", "tch"),
+	RegexReplace("x><(.)", "\\1\\1"),
 
 	SimpleReplace("a><a", "ā"),
+	SimpleReplace("o><u", "ī"),
 	SimpleReplace("u><u", "ū"),
 	SimpleReplace("e><e", "ē"),
 	SimpleReplace("o><o", "ō"),
@@ -97,12 +111,14 @@ writing_systems["hepburn"] = conversions
 
 # Hiragana
 conversions = [
+	SimpleReplace("_", ""),
+
 	SimpleReplace("<ya", "や"),
 	SimpleReplace("<yu", "ゆ"),
 	SimpleReplace("<yo", "よ"),
-	SimpleReplace("Ya", "iゃ"),
-	SimpleReplace("Yu", "iゅ"),
-	SimpleReplace("Yo", "iょ"),
+	SimpleReplace("ya", "iゃ"),
+	SimpleReplace("yu", "iゅ"),
+	SimpleReplace("yo", "iょ"),
 
 	SimpleReplace("<ka", "か"),
 	SimpleReplace("<ki", "き"),
@@ -148,7 +164,7 @@ conversions = [
 
 	SimpleReplace("<wa", "わ"),
 	SimpleReplace("<wo", "を"),
-	SimpleReplace("N>", "ん"),
+	SimpleReplace("n>", "ん"),
 	SimpleReplace("x>", "っ"),
 
 	SimpleReplace("<ga", "が"),
@@ -194,10 +210,11 @@ writing_systems["hiragana"] = conversions
 
 # Strict(Nihon/Kunrei-shiki)
 conversions = [
-	RegexReplace("N><([aiueo])", "n'><\\1"),
-	RegexReplace("x><(.)(.?)", "\\1><\\1\\2"),
-	SimpleReplace("Y", "y"),
-	SimpleReplace("N", "n"),
+	SimpleReplace("n><_", "n'"),
+
+	SimpleReplace("_", ""),
+
+	RegexReplace("x><(.)", "\\1\\1"),
 
 	SimpleReplace("<", ""),
 	SimpleReplace(">", "")
