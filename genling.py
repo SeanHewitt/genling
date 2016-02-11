@@ -44,7 +44,7 @@ class Syllable:
 		self.suffix = prop.get("suffix", "")
 		self.infix = prop.get("infix", "")
 
-	def is_permitted_postion(self, i, l):
+	def is_permitted_position(self, i, l):
 		if self.position == 0:
 			return True
 
@@ -81,7 +81,7 @@ class Stem:
 
 		string = list()
 		for i in range(syllable_amount):
-			syllables = [syllable for syllable in self.syllables if syllable.is_permitted_postion(i, syllable_amount)]
+			syllables = [syllable for syllable in self.syllables if syllable.is_permitted_position(i, syllable_amount)]
 			if len(syllables) > 1:
 				weights = [syllable.weight for syllable in syllables]
 				syllable = self.syllables[weighted_choice(weights)]
