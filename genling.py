@@ -1,6 +1,6 @@
 #
 #	Generatrum Linguarum
-#	Copyright (C) 2014-2015 Sean Hewitt <contact@SeanHewitt.com>
+#	Copyright (C) 2014-2016 Sean Hewitt <contact@SeanHewitt.com>
 #
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
@@ -16,9 +16,16 @@
 #	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from rand import weighted_choice
 from random import random
 from re import compile as re_compile
+
+def _weighted_choice(choices):
+	r = random() * sum(choices)
+	for i, w in enumerate(choices):
+		r -= w
+		if r < 0:
+			return i
+	return None
 
 class Phoneme:
 	def __init__(self, grapheme, weight=1):
@@ -33,7 +40,7 @@ class Segment:
 
 	def generate(self):
 		weights = [phoneme.weight for phoneme in self.phonemes]
-		return self.prefix + self.phonemes[weighted_choice(weights)].grapheme + self.suffix
+		return self.prefix + self.phonemes[_weighted_choice(weights)].grapheme + self.suffix
 
 class Syllable:
 	def __init__(self, segments, **prop):
@@ -77,14 +84,14 @@ class Stem:
 		self.infix = prop.get("infix", "")
 
 	def generate(self):
-		syllable_amount = weighted_choice(self.balance) + 1
+		syllable_amount = _weighted_choice(self.balance) + 1
 
 		string = list()
 		for i in range(syllable_amount):
 			syllables = [syllable for syllable in self.syllables if syllable.is_permitted_position(i, syllable_amount)]
 			if len(syllables) > 1:
 				weights = [syllable.weight for syllable in syllables]
-				syllable = self.syllables[weighted_choice(weights)]
+				syllable = self.syllables[_weighted_choice(weights)]
 			else:
 				syllable = syllables[0]
 
