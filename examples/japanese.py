@@ -52,16 +52,13 @@ segments.append(Segment(phonemes))
 
 syllables = [Syllable(segments, prefix="<", suffix=">")]
 
-syllable_balance = [2, 12, 8, 2, 1]
-stem = Stem(syllables, balance=syllable_balance, prefix="<", suffix=">")
-
 filters = [
 	SimpleFilter("_y"),
 	SimpleFilter("x>>"),
 
 	SimpleFilter("n><_",0.9),
 
-	SimpleFilter("<<d_[ui]")
+	SimpleFilter("<<d_[ui]"),
 	SimpleFilter("d_i", 0.9),
 	SimpleFilter("d_u", 0.9),
 
@@ -75,6 +72,11 @@ filters = [
 	RegexFilter("x><.y"),
 	RegexFilter("x><[^kstpc]")
 ]
+
+syllable_balance = [2, 12, 8, 2, 1]
+
+stem = Stem(syllables, balance=syllable_balance, filters=filters,
+	prefix="<", suffix=">")
 
 writing_systems = {}
 
@@ -224,8 +226,6 @@ writing_systems["strict"] = conversions
 
 from sys import argv
 
-amount = int(argv[1])
-
 conversions = writing_systems["hiragana"]
 if len(argv) > 2:
 	if argv[2] in writing_systems:
@@ -233,13 +233,8 @@ if len(argv) > 2:
 	elif argv[2] == "raw":
 		conversions = []
 
-while amount:
-	string = stem.generate()
-	for f in filters:
-		if f.is_rejected(string):
-			break
-	else:
-		for c in conversions:
-			string = c.replace(string)
-		print(string)
-		amount -= 1;
+for i in range(int(argv[1])):
+	word = stem.generate()
+	for c in conversions:
+		word = c.replace(word)
+	print(word)

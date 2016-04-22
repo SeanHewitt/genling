@@ -79,11 +79,22 @@ class Stem:
 	def __init__(self, syllables, **prop):
 		self.syllables = syllables
 		self.balance = prop.get("balance", [1])
+		self.filters = prop.get("filters", [])
 		self.prefix =  prop.get("prefix", "")
 		self.suffix = prop.get("suffix", "")
 		self.infix = prop.get("infix", "")
 
 	def generate(self):
+		for i in range(100):
+			stem = self._generate()
+			for f in self.filters:
+				if f.is_rejected(stem):
+					break
+			else:
+				return stem
+		raise Exception("Too many filter rejected stems.")
+
+	def _generate(self):
 		syllable_amount = _weighted_choice(self.balance) + 1
 
 		string = list()

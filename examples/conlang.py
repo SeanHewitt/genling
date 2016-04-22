@@ -187,9 +187,6 @@ segments.append(Segment(phonemes))
 
 syllables.append(Syllable(segments, position=2))
 
-syllable_balance = [5, 2]
-stem = Stem(syllables, balance=syllable_balance, prefix="<", infix="#", suffix=">")
-
 filters = [
 	SimpleFilter("x>"),
 	SimpleFilter("h>"),
@@ -206,6 +203,11 @@ filters = [
 
 	RegexFilter("<._") # Stem starting with an initial
 ]
+
+syllable_balance = [5, 2]
+
+stem = Stem(syllables, balance=syllable_balance, filters=filters,
+	prefix="<", infix="#", suffix=">")
 
 conversions = [
 	SimpleReplace("_", ""),
@@ -225,18 +227,11 @@ conversions = [
 
 from sys import argv
 
-amount = int(argv[1])
-
 if(len(argv) > 2 and argv[2] == "raw"):
 	conversions = []
 
-while amount:
-	string = stem.generate()
-	for f in filters:
-		if f.is_rejected(string):
-			break
-	else:
-		for c in conversions:
-			string = c.replace(string)
-		print(string)
-		amount -= 1;
+for i in range(int(argv[1])):
+	word = stem.generate()
+	for c in conversions:
+		word = c.replace(word)
+	print(word)
