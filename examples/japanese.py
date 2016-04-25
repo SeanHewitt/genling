@@ -5,7 +5,7 @@ segments = []
 
 # Initial
 phonemes = [
-	Phoneme("_", 20),
+	Phoneme("_", 16),
 
 	Phoneme("k", 5),
 	Phoneme("s", 4),
@@ -43,7 +43,7 @@ segments.append(Segment(phonemes))
 
 # Coda
 phonemes = [
-	Phoneme("_", 10),
+	Phoneme("_", 15),
 
 	Phoneme("n", 9),
 	Phoneme("x", 3)
