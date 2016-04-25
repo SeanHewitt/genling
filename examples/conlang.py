@@ -227,10 +227,15 @@ conversions = [
 
 from sys import argv
 
+if len(argv) > 1:
+	amount = int(argv[1])
+else:
+	amount = 10
+
 if(len(argv) > 2 and argv[2] == "raw"):
 	conversions = []
 
-for i in range(int(argv[1])):
+for i in range(amount):
 	word = stem.generate()
 	for c in conversions:
 		word = c.replace(word)

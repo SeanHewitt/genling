@@ -226,6 +226,11 @@ writing_systems["strict"] = conversions
 
 from sys import argv
 
+if len(argv) > 1:
+	amount = int(argv[1])
+else:
+	amount = 10
+
 conversions = writing_systems["hiragana"]
 if len(argv) > 2:
 	if argv[2] in writing_systems:
@@ -233,7 +238,7 @@ if len(argv) > 2:
 	elif argv[2] == "raw":
 		conversions = []
 
-for i in range(int(argv[1])):
+for i in range(amount):
 	word = stem.generate()
 	for c in conversions:
 		word = c.replace(word)
