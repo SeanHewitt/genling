@@ -98,13 +98,19 @@ class Stem:
 
 		string = list()
 		for i in range(syllable_amount):
-			syllables = [syllable for syllable in self.syllables if syllable.is_permitted_position(i, syllable_amount)]
+			syllables = list()
+			weights = list()
+			for syllable in self.syllables:
+				if not syllable.is_permitted_position(i, syllable_amount):
+					continue
+				syllables.append(syllable)
+				weights.append(syllable.weight)
+			
 			if len(syllables) > 1:
-				weights = [syllable.weight for syllable in syllables]
-				syllable = self.syllables[_weighted_choice(weights)]
+				syllable = syllables[_weighted_choice(weights)]
 			else:
 				syllable = syllables[0]
-
+			
 			string.append(syllable.generate())
 
 		return self.prefix + self.infix.join(string) + self.suffix
