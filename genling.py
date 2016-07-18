@@ -57,8 +57,7 @@ class Syllable:
 
 		if isinstance(self.position, int):
 			position = self.position if self.position > 0 else l+self.position+1
-
-			if self.position == (i+1):
+			if position == (i+1):
 				return True
 
 		elif(not isinstance(self.position, basestring) and
