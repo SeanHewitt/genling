@@ -95,7 +95,7 @@ class Syllable:
 		return self.prefix + self.infix.join(string) + self.suffix
 
 class Stem:
-	"""The stem of a word"""
+	"""The stem of a word."""
 	def __init__(self,
 			syllables: "the syllables of the stem",
 			balance: "the balance of stem length" = [1],
@@ -144,7 +144,7 @@ class Stem:
 		return self.prefix + self.infix.join(string) + self.suffix
 
 class SimpleFilter:
-	"""A filter to permit or reject strings containing a string"""
+	"""A filter to permit or reject strings containing a string."""
 	def __init__(self,
 			pattern: "the pattern to match",
 			probability: "the probability that this filter takes effect" = 1.0,
@@ -155,7 +155,7 @@ class SimpleFilter:
 
 	def is_permitted(self,
 			string: "the string to check") -> "if the string is permitted":
-		"""Check if the string is permitted"""
+		"""Check if the string is permitted."""
 		if random() > self.probability:
 			return not self.permit
 		if self._match(string):
@@ -165,7 +165,7 @@ class SimpleFilter:
 
 	def is_rejected(self,
 			string: "the string to check") -> "if the string is rejected":
-		"""Check if the string is rejected"""
+		"""Check if the string is rejected."""
 		return not self.is_permitted(string)
 
 	def _match(self, string):
@@ -184,7 +184,7 @@ class SimpleFilter:
 		self._prepare()
 
 class RegexFilter(SimpleFilter):
-	"""A filter to permit or reject strings matching a regex pattern"""
+	"""A filter to permit or reject strings matching a regex pattern."""
 	def _match(self, string):
 		return self._regex.search(string)
 
@@ -192,7 +192,7 @@ class RegexFilter(SimpleFilter):
 		self._regex = re_compile(self.pattern)
 
 class SimpleReplace:
-	"""A checker for replacing a matching string within strings"""
+	"""A checker for replacing a matching string within strings."""
 	def __init__(self,
 			pattern: "the pattern to match",
 			replacement: "the replacement string",
@@ -203,7 +203,7 @@ class SimpleReplace:
 
 	def replace(self,
 			string: "the string to check") -> "the replaced string":
-		"""Replace the matching parts of the string"""
+		"""Replace the matching parts of the string."""
 		if random() > self.probability:
 			return string
 
@@ -225,7 +225,7 @@ class SimpleReplace:
 		self._prepare()
 
 class RegexReplace(SimpleReplace):
-	"""A checker for replacing a matching regex pattern within strings"""
+	"""A checker for replacing a matching regex pattern within strings."""
 	def _replace(self, string, replacement):
 		return self._regex.sub(replacement, string)
 
