@@ -31,7 +31,7 @@ class Phoneme:
 	"""The phoneme of a segment."""
 	def __init__(self,
 			grapheme: "the graphical representation",
-			weight: "the likelihood of being chosen" = 1):
+			weight: "the likelihood of being chosen as a segment of a syllable" = 1):
 		self.grapheme = grapheme
 		self.weight = weight
 
@@ -55,7 +55,7 @@ class Syllable:
 	def __init__(self,
 			segments: "the segments of the syllable",
 			position: "the position of the syllable with a stem" = 0,
-			weight: "the likelihood of being chosen" = 1,
+			weight: "the likelihood of being chosen as a syllable in a stem" = 1,
 			prefix: "the preceding string" = "",
 			suffix: "the following string" = "",
 			infix: "the string between the segments" = ""):
