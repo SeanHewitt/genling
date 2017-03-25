@@ -213,6 +213,7 @@ writing_systems["hiragana"] = conversions
 # Strict(Nihon/Kunrei-shiki)
 conversions = [
 	SimpleReplace("n><_", "n'"),
+	SimpleReplace("n><y", "n'y"),
 
 	SimpleReplace("_", ""),
 
