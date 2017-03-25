@@ -83,6 +83,7 @@ writing_systems = {}
 # Hepburn
 conversions = [
 	SimpleReplace("n><_", "n'"),
+	SimpleReplace("n><y", "n'y"),
 
 	SimpleReplace("_", ""),
 
