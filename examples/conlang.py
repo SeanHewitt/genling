@@ -238,5 +238,5 @@ if(len(argv) > 2 and argv[2] == "raw"):
 for i in range(amount):
 	word = stem.generate()
 	for c in conversions:
-		word = c.replace(word)
+		word = c.apply(word)
 	print(word)

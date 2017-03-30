@@ -242,15 +242,15 @@ class SimpleReplace:
 	
 	Args:
 		pattern: The pattern to match.
-		replacement: The replacement string.
+		repl: The replacement string.
 		probability: The probability that the matched string is replaced.
 	"""
-	def __init__(self, pattern, replacement, probability = 1.0):
+	def __init__(self, pattern, repl, probability = 1.0):
 		self.pattern = pattern
-		self.replacement = replacement
+		self.repl = repl
 		self.probability = probability
 
-	def replace(self, string):
+	def apply(self, string):
 		"""Replace the matching parts of the string.
 		
 		Args:
@@ -262,10 +262,10 @@ class SimpleReplace:
 		if random() > self.probability:
 			return string
 
-		return self._replace(string, self.replacement)
+		return self._replace(string)
 
-	def _replace(self, string, replacement):
-		return string.replace(self.pattern, replacement)
+	def _replace(self, string):
+		return string.replace(self.pattern, self.repl)
 
 	def _prepare(self):
 		pass
@@ -281,8 +281,8 @@ class SimpleReplace:
 
 class RegexReplace(SimpleReplace):
 	"""A checker for replacing a matching regex pattern within strings."""
-	def _replace(self, string, replacement):
-		return self._regex.sub(replacement, string)
+	def _replace(self, string):
+		return self._regex.sub(self.repl, string)
 
 	def _prepare(self):
 		self._regex = re_compile(self.pattern)
