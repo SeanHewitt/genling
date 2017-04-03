@@ -9,7 +9,7 @@ The title of this project is in Latin and translates to "Generator of Languages"
 * Python3
 
 ## Usage of examples
-````
+```
 python3 conlang.py 100
 python3 conlang.py 100 raw
 
