@@ -80,7 +80,7 @@ class Syllable:
 		self.suffix = suffix
 		self.infix = infix
 
-	def is_permitted_position(self, i, length) -> "":
+	def is_permitted_position(self, i, length):
 		"""Check if this syllable is permitted in the stem's position.
 		
 		Args:
