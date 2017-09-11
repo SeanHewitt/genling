@@ -16,11 +16,11 @@
 #	along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from random import random
-from re import compile as re_compile
+import random
+import re
 
 def _weighted_choice(choices):
-	r = random() * sum(choices)
+	r = random.random() * sum(choices)
 	for i, w in enumerate(choices):
 		r -= w
 		if r < 0:
@@ -196,7 +196,7 @@ class SimpleFilter:
 		Returns:
 			If the string is permitted.
 		"""
-		if random() > self.probability:
+		if random.random() > self.probability:
 			return not self.permit
 		if self._match(string):
 			return self.permit
@@ -235,7 +235,7 @@ class RegexFilter(SimpleFilter):
 		return self._regex.search(string)
 
 	def _prepare(self):
-		self._regex = re_compile(self.pattern)
+		self._regex = re.compile(self.pattern)
 
 class SimpleReplace:
 	"""A checker for replacing a matching string within strings.
@@ -259,7 +259,7 @@ class SimpleReplace:
 		Returns:
 			The replaced string.
 		"""
-		if random() > self.probability:
+		if random.random() > self.probability:
 			return string
 
 		return self._replace(string)
@@ -285,4 +285,4 @@ class RegexReplace(SimpleReplace):
 		return self._regex.sub(self.repl, string)
 
 	def _prepare(self):
-		self._regex = re_compile(self.pattern)
+		self._regex = re.compile(self.pattern)
