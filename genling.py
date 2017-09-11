@@ -215,9 +215,22 @@ class SimpleFilter:
 		return not self.is_permitted(string)
 
 	def _match(self, string):
+		"""Overloadable match method.
+		
+		This method can be overloaded to define an alternative
+		implementation of matching the pattern within an input string.
+		
+		Args:
+			string: The string to check.
+		"""
 		return self.pattern in string
-
+	
+		
 	def _prepare(self):
+		"""Overloadable prepare method.
+		
+		This method is run after the filter pattern is defined.
+		"""
 		pass
 
 	@property
@@ -265,9 +278,21 @@ class SimpleReplace:
 		return self._replace(string)
 
 	def _replace(self, string):
+		"""Overloadable replace method.
+		
+		This method can be overloaded to define an alternative
+		implementation of replacing the pattern within an input string.
+		
+		Args:
+			string: The string to replace.
+		"""
 		return string.replace(self.pattern, self.repl)
 
 	def _prepare(self):
+		"""Overloadable prepare method.
+		
+		This method is run after the replace pattern is defined.
+		"""
 		pass
 
 	@property
