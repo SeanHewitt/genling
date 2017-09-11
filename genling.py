@@ -224,7 +224,6 @@ class SimpleFilter:
 			string: The string to check.
 		"""
 		return self.pattern in string
-	
 		
 	def _prepare(self):
 		"""Overloadable prepare method.
