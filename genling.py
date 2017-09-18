@@ -201,7 +201,7 @@ class Word:
 		'''Create a word from a stem.
 		
 		Args:
-			stem_string: 
+			stem_string: The stem string from which to create a word.
 		'''
 		string = stem_string
 		for r in self.replacements:
