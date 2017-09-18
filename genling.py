@@ -100,26 +100,19 @@ class Syllable:
 			return True
 
 		if isinstance(self.position, int):
-			if self.position > 0:
-				position = self.position
-			else:
-				position = length + self.position+1
+			position = self.position
+			if not self.position > 0:
+				position += length + 1
 			if position == (i+1):
 				return True
 
 		elif(not isinstance(self.position, basestring) and
 				len(self.position) > 1):
-					
-			if self.position[0] > 0:
-				minpos = self.position[0]
-			else:
-				minpos = l + self.position[0] + 1
-				
-			if self.position[1] > 0:
-				maxpos = self.position[1]
-			else:
-				maxpos = l + self.position[1] + 1
-
+			minpos, maxpos = self.position
+			if not self.position[0] > 0:
+				minpos += length + 1
+			if not self.position[1] > 0:
+				maxpos += length + 1
 			if minpos <= (i+1) <= maxpos:
 				return True
 
