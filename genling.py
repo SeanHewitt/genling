@@ -28,41 +28,41 @@ def _weighted_choice(choices):
 	return None
 
 class Phoneme:
-	"""A phoneme of a segment.
+	'''A phoneme of a segment.
 	
 	Args:
 		grapheme: The graphical representation.
 		weight: The likelihood of being chosen as a segment of a syllable.
-	"""
+	'''
 	def __init__(self, grapheme, weight = 1):
 		self.grapheme = grapheme
 		self.weight = weight
 
 class Segment:
-	"""A segment within a syllable.
+	'''A segment within a syllable.
 	
 	Args:
 		phonemes: The possible phonemes from which to generate a
 			syllable segment.
 		prefix: The string added to the front of a generated segment.
 		suffix: The string added at the end of a generated segment.
-	"""
+	'''
 	def __init__(self, phonemes, prefix = "", suffix = ""):
 		self.phonemes = phonemes
 		self.prefix = prefix
 		self.suffix = suffix
 
 	def generate(self):
-		"""Generate a segment by choosing one of its phonemes.
+		'''Generate a segment by choosing one of its phonemes.
 		
 		Returns:
 			The generated segment.
-		"""
+		'''
 		weights = [phoneme.weight for phoneme in self.phonemes]
 		return self.prefix + self.phonemes[_weighted_choice(weights)].grapheme + self.suffix
 
 class Syllable:
-	"""A syllable within a stem.
+	'''A syllable within a stem.
 	
 	Args:
 		segments: The possible segments from which to generate a stem syllable.
@@ -71,7 +71,7 @@ class Syllable:
 		prefix: The string added to the front of a generated syllable.
 		suffix: The string added at the end of a generated syllable.
 		infix: The string inserted between generated segments.
-	"""
+	'''
 	def __init__(self, segments, position = 0, weight = 1,
 			prefix = "", suffix = "", infix = ""):
 		self.segments = segments
@@ -82,7 +82,7 @@ class Syllable:
 		self.infix = infix
 
 	def is_permitted_position(self, i, length):
-		"""Check if this syllable is permitted in the stem's position.
+		'''Check if this syllable is permitted in the stem's position.
 		
 		Args:
 			i: The position within the stem.
@@ -90,7 +90,7 @@ class Syllable:
 			
 		Returns:
 			If this syllable is permitted.
-		"""
+		'''
 		if self.position == 0:
 			return True
 
@@ -110,16 +110,16 @@ class Syllable:
 		return False
 
 	def generate(self):
-		"""Generate a syllable by its segments.
+		'''Generate a syllable by its segments.
 		
 		Returns:
 			The generated syllable.
-		"""
+		'''
 		string = [segment.generate() for segment in self.segments]
 		return self.prefix + self.infix.join(string) + self.suffix
 
 class Stem:
-	"""The stem of a word.
+	'''The stem of a word.
 	
 	Args:
 		syllables: The possible syllables from which to generate a word stem.
@@ -130,7 +130,7 @@ class Stem:
 		prefix: The string added to the front of a generated stem.
 		suffix: The string added at the end of a generated stem.
 		infix: The string inserted between generated syllables.
-	"""
+	'''
 	def __init__(self, syllables, balance = [1], filters = [],
 			prefix = "", suffix = "", infix = ""):
 		self.syllables = syllables
@@ -141,11 +141,11 @@ class Stem:
 		self.infix = infix
 
 	def generate(self):
-		"""Generate a stem by its syllables.
+		'''Generate a stem by its syllables.
 		
 		Returns:
 			The generated stem.
-		"""
+		'''
 		for i in range(100):
 			stem = self._generate()
 			for f in self.filters:
@@ -178,27 +178,27 @@ class Stem:
 		return self.prefix + self.infix.join(string) + self.suffix
 
 class SimpleFilter:
-	"""A filter to permit or reject strings containing a string.
+	'''A filter to permit or reject strings containing a string.
 	
 	Args:
 		pattern: The pattern to match.
 		probability: The probability that this filter takes effect.
 		permit: If this filter should permit instead of reject.
-	"""
+	'''
 	def __init__(self, pattern, probability = 1.0, permit = False):
 		self.pattern = pattern
 		self.probability = probability
 		self.permit = permit
 
 	def is_permitted(self, string):
-		"""Check if the string is permitted.
+		'''Check if the string is permitted.
 		
 		Args:
 			string: The string to check.
 			
 		Returns:
 			If the string is permitted.
-		"""
+		'''
 		if random.random() > self.probability:
 			return not self.permit
 		if self._match(string):
@@ -207,32 +207,32 @@ class SimpleFilter:
 			return not self.permit
 
 	def is_rejected(self, string):
-		"""Check if the string is rejected.
+		'''Check if the string is rejected.
 		
 		Args:
 			string: The string to check.
 			
 		Returns:
 			If the string is rejected.
-		"""
+		'''
 		return not self.is_permitted(string)
 
 	def _match(self, string):
-		"""Overloadable match method.
+		'''Overloadable match method.
 		
 		This method can be overloaded to define an alternative
 		implementation of matching the pattern within an input string.
 		
 		Args:
 			string: The string to check.
-		"""
+		'''
 		return self.pattern in string
 		
 	def _prepare(self):
-		"""Overloadable prepare method.
+		'''Overloadable prepare method.
 		
 		This method is run after the filter pattern is defined.
-		"""
+		'''
 		pass
 
 	@property
@@ -245,7 +245,7 @@ class SimpleFilter:
 		self._prepare()
 
 class RegexFilter(SimpleFilter):
-	"""A filter to permit or reject strings matching a regex pattern."""
+	'''A filter to permit or reject strings matching a regex pattern.'''
 	def _match(self, string):
 		return self._regex.search(string)
 
@@ -253,48 +253,48 @@ class RegexFilter(SimpleFilter):
 		self._regex = re.compile(self.pattern)
 
 class SimpleReplace:
-	"""A checker for replacing a matching string within strings.
+	'''A checker for replacing a matching string within strings.
 	
 	Args:
 		pattern: The pattern to match.
 		repl: The replacement string.
 		probability: The probability that the matched string is replaced.
-	"""
+	'''
 	def __init__(self, pattern, repl, probability = 1.0):
 		self.pattern = pattern
 		self.repl = repl
 		self.probability = probability
 
 	def apply(self, string):
-		"""Replace the matching parts of the string.
+		'''Replace the matching parts of the string.
 		
 		Args:
 			string: The string to check.
 			
 		Returns:
 			The replaced string.
-		"""
+		'''
 		if random.random() > self.probability:
 			return string
 
 		return self._replace(string)
 
 	def _replace(self, string):
-		"""Overloadable replace method.
+		'''Overloadable replace method.
 		
 		This method can be overloaded to define an alternative
 		implementation of replacing the pattern within an input string.
 		
 		Args:
 			string: The string to replace.
-		"""
+		'''
 		return string.replace(self.pattern, self.repl)
 
 	def _prepare(self):
-		"""Overloadable prepare method.
+		'''Overloadable prepare method.
 		
 		This method is run after the replace pattern is defined.
-		"""
+		'''
 		pass
 
 	@property
@@ -307,7 +307,7 @@ class SimpleReplace:
 		self._prepare()
 
 class RegexReplace(SimpleReplace):
-	"""A checker for replacing a matching regex pattern within strings."""
+	'''A checker for replacing a matching regex pattern within strings.'''
 	def _replace(self, string):
 		return self._regex.sub(self.repl, string)
 
