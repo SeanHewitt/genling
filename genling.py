@@ -28,7 +28,7 @@ def _weighted_choice(choices):
 	return None
 
 class Phoneme:
-	"""The phoneme of a segment.
+	"""A phoneme of a segment.
 	
 	Args:
 		grapheme: The graphical representation.
@@ -39,12 +39,13 @@ class Phoneme:
 		self.weight = weight
 
 class Segment:
-	"""The segment within a syllable.
+	"""A segment within a syllable.
 	
 	Args:
-		phonemes: The phonemes of the segment.
-		prefix: The preceding string.
-		suffix: The following string.
+		phonemes: The possible phonemes from which to generate a
+			syllable segment.
+		prefix: The string added to the front of a generated segment.
+		suffix: The string added at the end of a generated segment.
 	"""
 	def __init__(self, phonemes, prefix = "", suffix = ""):
 		self.phonemes = phonemes
@@ -61,15 +62,15 @@ class Segment:
 		return self.prefix + self.phonemes[_weighted_choice(weights)].grapheme + self.suffix
 
 class Syllable:
-	"""The syllable within a stem.
+	"""A syllable within a stem.
 	
 	Args:
-		segments: The segments of the syllable.
+		segments: The possible segments from which to generate a stem syllable.
 		position: The position of the syllable with a stem.
 		weight: The likelihood of being chosen as a syllable in a stem.
-		prefix: The preceding string.
-		suffix: The following string.
-		infix: The string between the segments.
+		prefix: The string added to the front of a generated syllable.
+		suffix: The string added at the end of a generated syllable.
+		infix: The string inserted between generated segments.
 	"""
 	def __init__(self, segments, position = 0, weight = 1,
 			prefix = "", suffix = "", infix = ""):
@@ -121,14 +122,14 @@ class Stem:
 	"""The stem of a word.
 	
 	Args:
-		syllables: The syllables of the stem.
-		balance: The balance of stem length.
+		syllables: The possible syllables from which to generate a word stem.
+		balance: The balance of the amount of syllables in the generated stem.
 		filters: The filters for permitting or rejecting stems.
-			The stem string to be filtered includes the Stem
+			The stem string to be filtered includes the Stem object
 			prefix, suffix and infixes.
-		prefix: The preceding string.
-		suffix: The following string.
-		infix: The string between the syllables.
+		prefix: The string added to the front of a generated stem.
+		suffix: The string added at the end of a generated stem.
+		infix: The string inserted between generated syllables.
 	"""
 	def __init__(self, syllables, balance = [1], filters = [],
 			prefix = "", suffix = "", infix = ""):
