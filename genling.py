@@ -183,6 +183,31 @@ class Stem:
 
 		return self.prefix + self.infix.join(string) + self.suffix
 
+class Word:
+	'''A word formed from a stem.
+	
+	A Word object may represent an inflection such as a noun declension, verb
+	conjugation, derivation, etc. Finally, the replacements may also remove
+	the helper characters (prefixes, infixes and suffixes) and transliterate
+	the raw graphemes to the correct writing system.
+	
+	Args:
+		replacements: The replace objects for creating a word from a stem.
+	'''
+	def __init__(self, replacements = []):
+		self.replacements = replacements
+	
+	def create(self, stem_string):
+		'''Create a word from a stem.
+		
+		Args:
+			stem_string: 
+		'''
+		string = stem_string
+		for r in self.replacements:
+			string = r.apply(string)
+		return string
+
 class SimpleFilter:
 	'''A filter to permit or reject strings containing a string.
 	
