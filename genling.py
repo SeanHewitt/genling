@@ -124,6 +124,8 @@ class Stem:
 		syllables: The syllables of the stem.
 		balance: The balance of stem length.
 		filters: The filters for permitting or rejecting stems.
+			The stem string to be filtered includes the Stem
+			prefix, suffix and infixes.
 		prefix: The preceding string.
 		suffix: The following string.
 		infix: The string between the syllables.
