@@ -109,9 +109,9 @@ class Syllable:
 		elif(not isinstance(self.position, basestring) and
 				len(self.position) > 1):
 			minpos, maxpos = self.position
-			if not self.position[0] > 0:
+			if not minpos > 0:
 				minpos += length + 1
-			if not self.position[1] > 0:
+			if not maxpos > 0:
 				maxpos += length + 1
 			if minpos <= (i+1) <= maxpos:
 				return True
