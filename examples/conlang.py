@@ -209,34 +209,38 @@ syllable_balance = [5, 2]
 stem = Stem(syllables, balance=syllable_balance, filters=filters,
 	prefix="<", infix="#", suffix=">")
 
-conversions = [
-	SimpleReplace("_", ""),
+rep_pre = [
+	SimpleReplace("_", "")
+]
 
+rep_writing_system = [
 	SimpleReplace("A", "ı"),
 	SimpleReplace("oe", "ø"),
 
 	SimpleReplace("T", "þ"),
 	SimpleReplace("D", "ð"),
 
-	RegexReplace("x#(.)", "\\1\\1"),
+	RegexReplace("x#(.)", "\\1\\1")
+]
 
+rep_helpers = [
 	SimpleReplace("<", ""),
 	SimpleReplace("#", ""),
 	SimpleReplace(">", "")
 ]
 
-from sys import argv
+import sys
 
-if len(argv) > 1:
-	amount = int(argv[1])
+amount = int(sys.argv[1]) if len(sys.argv) > 1 else 10
+writing_system = sys.argv[2] if len(sys.argv) > 2 else None
+
+if writing_system == "raw":
+	word = Word()
+elif writing_system == "rough":
+	word = Word(rep_pre + rep_helpers)
 else:
-	amount = 10
-
-if(len(argv) > 2 and argv[2] == "raw"):
-	conversions = []
+	word = Word(rep_pre + rep_writing_system + rep_helpers)
 
 for i in range(amount):
-	word = stem.generate()
-	for c in conversions:
-		word = c.apply(word)
-	print(word)
+	output = stem.generate()
+	print(word.create(output))

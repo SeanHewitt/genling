@@ -78,42 +78,7 @@ syllable_balance = [2, 12, 8, 2, 1]
 stem = Stem(syllables, balance=syllable_balance, filters=filters,
 	prefix="<", suffix=">")
 
-writing_systems = {}
-
-# Hepburn
-conversions = [
-	SimpleReplace("n><_", "n'"),
-	SimpleReplace("n><y", "n'y"),
-
-	SimpleReplace("_", ""),
-
-	SimpleReplace("si", "shi"),
-	SimpleReplace("sy", "sh"),
-	SimpleReplace("ti", "chi"),
-	SimpleReplace("tu", "tsu"),
-	SimpleReplace("hu", "fu"),
-	SimpleReplace("ty", "ch"),
-	SimpleReplace("zi", "ji"),
-	SimpleReplace("zy", "j"),
-	SimpleReplace("di", "ji"),
-	SimpleReplace("du", "ju"),
-	SimpleReplace("x><ch", "tch"),
-	RegexReplace("x><(.)", "\\1\\1"),
-
-	SimpleReplace("a><a", "ā"),
-	SimpleReplace("o><u", "ī"),
-	SimpleReplace("u><u", "ū"),
-	SimpleReplace("e><e", "ē"),
-	SimpleReplace("o><o", "ō"),
-	SimpleReplace("o><u", "ō"),
-
-	SimpleReplace("<", ""),
-	SimpleReplace(">", "")
-]
-writing_systems["hepburn"] = conversions
-
-# Hiragana
-conversions = [
+rep_hiragana = [
 	SimpleReplace("_", ""),
 
 	SimpleReplace("<ya", "や"),
@@ -204,44 +169,71 @@ conversions = [
 	SimpleReplace("<i", "い"),
 	SimpleReplace("<u", "う"),
 	SimpleReplace("<e", "え"),
-	SimpleReplace("<o", "お"),
-
-	SimpleReplace("<", ""),
-	SimpleReplace(">", "")
+	SimpleReplace("<o", "お")
 ]
-writing_systems["hiragana"] = conversions
 
-# Strict(Nihon/Kunrei-shiki)
-conversions = [
+rep_hepburn = [
 	SimpleReplace("n><_", "n'"),
 	SimpleReplace("n><y", "n'y"),
 
 	SimpleReplace("_", ""),
 
+	SimpleReplace("si", "shi"),
+	SimpleReplace("sy", "sh"),
+	SimpleReplace("ti", "chi"),
+	SimpleReplace("tu", "tsu"),
+	SimpleReplace("hu", "fu"),
+	SimpleReplace("ty", "ch"),
+	SimpleReplace("zi", "ji"),
+	SimpleReplace("zy", "j"),
+	SimpleReplace("di", "ji"),
+	SimpleReplace("du", "ju"),
+	SimpleReplace("x><ch", "tch"),
 	RegexReplace("x><(.)", "\\1\\1"),
 
+	SimpleReplace("a><a", "ā"),
+	SimpleReplace("o><u", "ī"),
+	SimpleReplace("u><u", "ū"),
+	SimpleReplace("e><e", "ē"),
+	SimpleReplace("o><o", "ō"),
+	SimpleReplace("o><u", "ō")
+]
+
+# Nihon/Kunrei-shiki
+rep_strict = [
+	SimpleReplace("n><_", "n'"),
+	SimpleReplace("n><y", "n'y"),
+
+	SimpleReplace("_", ""),
+
+	RegexReplace("x><(.)", "\\1\\1")
+]
+
+rep_rough = [
+	SimpleReplace("_", "")
+]
+
+rep_helpers = [
 	SimpleReplace("<", ""),
 	SimpleReplace(">", "")
 ]
-writing_systems["strict"] = conversions
 
+import sys
 
-from sys import argv
+amount = int(sys.argv[1]) if len(sys.argv) > 1 else 10
+writing_system = sys.argv[2] if len(sys.argv) > 2 else None
 
-if len(argv) > 1:
-	amount = int(argv[1])
+if writing_system == "raw":
+	word = Word()
+elif writing_system == "rough":
+	word = Word(rep_rough + rep_helpers)
+elif writing_system == "hepburn":
+	word = Word(rep_hepburn + rep_helpers)
+elif writing_system == "strict":
+	word = Word(rep_strict + rep_helpers)
 else:
-	amount = 10
-
-conversions = writing_systems["hiragana"]
-if len(argv) > 2:
-	if argv[2] in writing_systems:
-		conversions = writing_systems[argv[2]]
-	elif argv[2] == "raw":
-		conversions = []
+	word = Word(rep_hiragana + rep_helpers)
 
 for i in range(amount):
-	word = stem.generate()
-	for c in conversions:
-		word = c.apply(word)
-	print(word)
+	output = stem.generate()
+	print(word.create(output))
