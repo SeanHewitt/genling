@@ -61,7 +61,8 @@ class Segment:
 			The generated segment.
 		'''
 		weights = [phoneme.weight for phoneme in self.phonemes]
-		return self.prefix + self.phonemes[_weighted_choice(weights)].grapheme + self.suffix
+		return (self.prefix +
+			self.phonemes[_weighted_choice(weights)].grapheme + self.suffix)
 
 class Syllable:
 	'''A syllable within a stem.
