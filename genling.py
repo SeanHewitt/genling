@@ -55,6 +55,8 @@ class Segment:
 	def generate(self):
 		'''Generate a segment by choosing one of its phonemes.
 		
+		Usually only called by the Syllable object.
+		
 		Returns:
 			The generated segment.
 		'''
@@ -84,6 +86,8 @@ class Syllable:
 	def is_permitted_position(self, i, length):
 		'''Check if this syllable is permitted in the stem's position.
 		
+		Usually only called by the Stem object.
+		
 		Args:
 			i: The position within the stem.
 			length: The number of syllables with the stem.
@@ -111,6 +115,8 @@ class Syllable:
 
 	def generate(self):
 		'''Generate a syllable by its segments.
+		
+		Usually only called by the Stem object.
 		
 		Returns:
 			The generated syllable.
