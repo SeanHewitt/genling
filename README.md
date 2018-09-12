@@ -6,7 +6,7 @@ In the generating process, weights and probabilities affect the usage of individ
 The title of this project is in Latin and translates to "Generator of Languages".
 
 ## Requirements
-* Python3
+* Python 3
 
 ## Usage of examples
 ```

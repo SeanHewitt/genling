@@ -1,6 +1,6 @@
 #
 #	Generatrum Linguarum, a conlang word generator library
-#	Copyright (C) 2014-2017 Sean Hewitt <contact@SeanHewitt.com>
+#	Copyright (C) 2014-2018 Seán Hewitt <contact@2sh.me>
 #
 #	This library is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
