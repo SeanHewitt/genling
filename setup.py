@@ -13,6 +13,8 @@ setuptools.setup(
 	author_email="contact@2sh.me",
 	
 	description="Generatrum Linguarum, a conlang word generator library",
+	long_description=long_description,
+	long_description_content_type="text/markdown",
 	
 	url="https://github.com/2sh/genling",
 	

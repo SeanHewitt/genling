@@ -8,7 +8,21 @@ The title of this project is in Latin and translates to "Generator of Languages"
 ## Requirements
 * Python 3
 
-## Usage of examples
+## Installation
+From the Python Package Index:
+```
+pip install genling
+```
+
+Or download and run:
+```
+python3 setup.py install
+```
+
+## Examples
+Examples of using this library can be found in the git repository.
+
+Command line usage of the examples:
 ```
 python3 conlang.py 100
 python3 conlang.py 100 raw
