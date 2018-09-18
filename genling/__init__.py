@@ -25,7 +25,6 @@ def _weighted_choice(choices):
 		r -= w
 		if r < 0:
 			return i
-	return None
 
 class Phoneme:
 	'''A phoneme of a segment.
